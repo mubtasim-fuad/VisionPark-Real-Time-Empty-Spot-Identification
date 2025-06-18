@@ -15,8 +15,8 @@
 The aim of this project is to develop a Real-time detection of empty parking spots using AI and computer vision to improve parking efficiency. 
 
 This is accomplished by:
-- **Collecting and degrading images**
-- **Training a super-resolution model**
+- **Collecting Images**
+- **Training a model**
 - **Evaluating with SVM Classifier**
 - **Generating side-by-side comparisons for visual verification**
 
