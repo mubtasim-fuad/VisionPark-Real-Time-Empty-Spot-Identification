@@ -57,9 +57,8 @@ This is accomplished by:
   
 ## Team Members
 
-| Student ID   | Name                        |
-|--------------|-----------------------------|        |
-| 2022122042   | Md. Mubtasim Fuad           |
+| Student ID  | Name                       
+|2022122042   | Md. Mubtasim Fuad           |
 
 
 **Faculty Supervisor**: Md. Shahriar Hussain  
