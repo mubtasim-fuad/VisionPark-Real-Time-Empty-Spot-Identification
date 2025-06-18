@@ -47,7 +47,7 @@ This is accomplished by:
 
 
 ### Development Tools
-- Python 3.8+
+- Python 3.9+
 - Git & GitHub for version control
 - Jupyter Notebooks for result visualization
 
