@@ -1,6 +1,5 @@
 import cv2
-
-from util import get_parking_spots_bboxes   # Import function to get bounding boxes of parking spots from connected components
+from util import get_parking_spots_bboxes   # Import function to get bounding boxes of parking spots
 from util import empty_or_not               # Import function to check if a parking spot is empty or not
 import numpy as np
 from matplotlib import pyplot as plt
@@ -36,18 +35,25 @@ previous_frame = None
 # Open the video file for reading frames
 cap = cv2.VideoCapture(video_path)
 
+# Check if video opened successfully
+if not cap.isOpened():
+    print(f"[Error] Cannot open video: {video_path}")
+    exit()
+
 ret = True      # Flag to indicate if frame reading was successful
-
 step = 30       # Number of frames to skip between analyses (process every 30th frame)
-
 frame_nmr = 0   # Counter for frame number processed
 
 # Main loop to read and process video frames
 while ret:
     ret, frame = cap.read()   # Read a frame from the video
 
+    if not ret:
+        print(f"[Warning] Skipping empty frame #{frame_nmr}")
+        break  # Or use continue if you want to skip but keep running
+
     # If current frame number is multiple of step and previous frame exists, compute difference for each spot
-    if frame_nmr % step ==  0 and previous_frame is not None:
+    if frame_nmr % step == 0 and previous_frame is not None:
         for spot_indx, spot in enumerate(spots):
             x1, y1, w, h = spot
             # Crop the current spot area from current frame
@@ -56,13 +62,13 @@ while ret:
             diffs[spot_indx] = calc_diffs(spot_crop, previous_frame[y1:y1 + h, x1:x1 + w, :])
 
     # Every step frames, update the parking spot status (empty or not)
-    if frame_nmr % step ==  0:
+    if frame_nmr % step == 0:
         # If this is the first frame, check all spots
         if previous_frame is None:
             arr_ = range(len(spots))
         else:
             # Otherwise, select spots with significant change (diff > 40% of max difference)
-            arr_ = [j for j in np.argsort(diffs) if diffs[j]/np.amax(diffs)>0.4]
+            arr_ = [j for j in np.argsort(diffs) if diffs[j] / np.amax(diffs) > 0.4]
         for spot_indx in arr_:
             spot = spots[spot_indx]
             x1, y1, w, h = spot
@@ -73,7 +79,7 @@ while ret:
             spots_status[spot_indx] = spot_status
 
     # Update the previous_frame variable to the current frame copy for next iteration comparison
-    if frame_nmr % step ==  0:
+    if frame_nmr % step == 0:
         previous_frame = frame.copy()
 
     # For every spot, draw a rectangle on the frame with color depending on spot status
@@ -86,20 +92,21 @@ while ret:
             cv2.rectangle(frame, (x1, y1), (x1 + w, y1 + h), (0, 0, 255), 2)
 
     # Draw a black filled rectangle on frame for the info panel background
-    cv2.rectangle(frame, (80, 20), (630, 110), (0,0,0), -1)
+    cv2.rectangle(frame, (80, 20), (630, 110), (0, 0, 0), -1)
 
     # Put text on the frame showing how many spots are empty out of total spots
-    cv2.putText(frame, "Available Empty Spots: {}/{}".format(str(sum(spots_status)), str(len(spots_status))),
-                (100, 60), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 2)
+    cv2.putText(frame,
+                "Available Empty Spots: {}/{}".format(str(sum(spots_status)), str(len(spots_status))),
+                (100, 60), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
 
     # Put instruction text for quitting
-    cv2.putText(frame, "Press Q to exit", (100, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 2)
+    cv2.putText(frame, "Press Q to exit", (100, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
 
     # Create a window that can be resized
     cv2.namedWindow('frame', cv2.WINDOW_NORMAL)
 
     # Display the frame with drawn rectangles and text
-    cv2.imshow('frame',frame)
+    cv2.imshow('frame', frame)
 
     # Wait 25ms for key press; if 'q' or 'Q' is pressed, exit the loop
     if cv2.waitKey(25) & 0xFF == ord('q'):
