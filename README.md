@@ -1,6 +1,12 @@
 <div align="center">
   
 # VisionPark:Real-Time Empty Spot Identification using Machine Learning
+<p align="center">
+ <img alt="Languages" src="https://img.shields.io/github/languages/count/mubtasim-fuad/VisionPark-Real-Time-Empty-Spot-Identification">
+ <img alt="Repository size" src="https://img.shields.io/github/repo-size/mubtasim-fuad/VisionPark-Real-Time-Empty-Spot-Identification">
+ <img alt="Contributors" src="https://img.shields.io/github/contributors/mubtasim-fuad/VisionPark-Real-Time-Empty-Spot-Identification">
+ <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/mubtasim-fuad/VisionPark-Real-Time-Empty-Spot-Identification">
+</p>
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 
